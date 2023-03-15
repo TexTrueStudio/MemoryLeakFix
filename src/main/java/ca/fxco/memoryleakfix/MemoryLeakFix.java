@@ -1,9 +1,12 @@
 package ca.fxco.memoryleakfix;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
-
 import net.minecraft.network.PacketByteBuf;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.logging.ILogger;
@@ -15,14 +18,22 @@ import org.spongepowered.asm.mixin.transformer.ClassInfo;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class MemoryLeakFix implements ModInitializer {
+@Mod(MemoryLeakFix.MOD_ID)
+public class MemoryLeakFix {
 
     public static final String MOD_ID = "memoryleakfix";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Set<PacketByteBuf> BUFFERS_TO_CLEAR = Collections.synchronizedSet(new HashSet<>());
 
-    @Override
-    public void onInitialize() {}
+    public MemoryLeakFix() {
+        IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
+
+        MOD_BUS.addListener(this::onInitialize);
+
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public void onInitialize(final FMLCommonSetupEvent event) {}
 
     public static void forceLoadAllMixinsAndClearSpongePoweredCache() {
         LOGGER.info("[MemoryLeakFix] Attempting to ForceLoad All Mixins and clear cache");
@@ -67,7 +78,7 @@ public class MemoryLeakFix implements ModInitializer {
     private static final String OBJECT = "java/lang/Object";
 
     private static void emptyClassInfo() throws NoSuchFieldException, IllegalAccessException {
-        if (FabricLoader.getInstance().isModLoaded("not-that-cc"))
+        if (ModList.get().isLoaded("not-that-cc"))
             return; // Crashes crafty crashes if it crashes
         Field cacheField = ClassInfo.class.getDeclaredField("cache");
         cacheField.setAccessible(true);
