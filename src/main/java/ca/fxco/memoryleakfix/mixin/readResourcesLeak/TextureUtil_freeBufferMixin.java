@@ -1,8 +1,8 @@
 package ca.fxco.memoryleakfix.mixin.readResourcesLeak;
 
 import com.mojang.blaze3d.platform.TextureUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.system.MemoryUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 @Mixin(value = TextureUtil.class, remap = false)
 public class TextureUtil_freeBufferMixin {
 
