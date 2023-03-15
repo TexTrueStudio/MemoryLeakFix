@@ -1,4 +1,4 @@
-# memoryLeakFix  
+# memoryLeakFix-Forge
 ### A mod that fixes multiple memory leaks in minecraft. Both server-side & client-side  
   
 For the best performance & memory usage, I recommend using this mod with:  
@@ -7,8 +7,4 @@ For the best performance & memory usage, I recommend using this mod with:
 - [FerriteCore](https://github.com/malte0811/FerriteCore) - Memory usage optimizations 
   
   
-**Memory Leak Explanations:** https://github.com/fxmorin/memoryLeakFix/wiki/Current-Fixes  
-
----
-
-However I don't allow clients or other mods to merge this mod without permission, if you would like to use this mod in your client or another mod please contact me.
+**Memory Leak Explanations:** https://github.com/fxmorin/memoryLeakFix/wiki/Current-Fixes
